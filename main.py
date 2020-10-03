@@ -1,4 +1,4 @@
-import polygons
+import shapes
 from math import *
 import numpy as np
 import pygame
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
     white = [255, 255, 255]
 
-    cube = polygons.Cube((width/2, height/2, 0), 100, screen)
+    cube = shapes.Cube((width / 2, height / 2, 0), 100, screen)
 
     angle = 1
     while 1:
