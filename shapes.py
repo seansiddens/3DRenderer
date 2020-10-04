@@ -286,8 +286,8 @@ class HyperCube:
 
     def draw(self):
         points = self.project3D(self.project4D())
-        points = np.multiply(100, points)
-        points = np.add(points, 350)
+        points = np.multiply(50, points)
+        points = np.add(points, 200)
         for i in range(len(points)):
             pygame.draw.circle(self.screen, WHITE, (int(points[i][0]), int(points[i][1])), 1)
         for edge in self.edges:

@@ -43,8 +43,7 @@ if __name__ == '__main__':
         # sphere.draw()
         # cube.draw()
 
-        hyper_cube.rotate1(1)
-        hyper_cube.rotate2(1)
+        hyper_cube.rotate_xz(1)
         hyper_cube.draw()
 
 
