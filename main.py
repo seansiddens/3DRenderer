@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     pygame.init()
 
-    size = width, height = 700, 700
+    size = width, height = 400, 400
     screen = pygame.display.set_mode(size)
     white = [255, 255, 255]
 
@@ -43,7 +43,8 @@ if __name__ == '__main__':
         # sphere.draw()
         # cube.draw()
 
-        hyper_cube.rotate_xw(1)
+        hyper_cube.rotate1(1)
+        hyper_cube.rotate2(1)
         hyper_cube.draw()
 
 

@@ -209,6 +209,7 @@ class HyperCube:
                                   [  1, -1, -1, -1],
                                   [  1,  1, -1, -1],
                                   [ -1,  1, -1, -1]])
+        print(self.vertices.shape)
 
         # self.vertices = np.array([
         #     [self.x - self.half_length, self.y + self.half_length, self.z + self.half_length, self.w + self.half_length],
@@ -262,7 +263,7 @@ class HyperCube:
                                [11, 15]])
 
     def gen_matrix(self, w):
-        l = 2
+        l = 1.9
         matrix = np.zeros(shape=(3, 4))
         matrix[0, 0] = abs((1 / (l - w)))
         matrix[1, 1] = abs((1 / (l - w)))
@@ -273,7 +274,7 @@ class HyperCube:
     def project4D(self):
         points_3d = np.empty(shape=(16, 3))
         for i in range(len(self.vertices)):
-            w = self.vertices[i][3]
+            w = self.vertices[i, 3]
             points_3d[i] = np.matmul(self.gen_matrix(w), self.vertices[i])
         return points_3d
 
@@ -286,19 +287,27 @@ class HyperCube:
     def draw(self):
         points = self.project3D(self.project4D())
         points = np.multiply(100, points)
-        points = np.add(points, 250)
+        points = np.add(points, 350)
         for i in range(len(points)):
             pygame.draw.circle(self.screen, WHITE, (int(points[i][0]), int(points[i][1])), 1)
         for edge in self.edges:
             pygame.draw.line(self.screen, WHITE, (int(points[edge[0]][0]), int(points[edge[0]][1])),
                                                  (int(points[edge[1]][0]), int(points[edge[1]][1])))
 
-    def rotate(self, degrees):
+    def rotate1(self, degrees):
         A = radians(degrees)
         rot_mat = np.array([[cos(A), -sin(A),      0,           0],
                            [sin(A),  cos(A),      0,           0],
-                           [     0,       0, cos(A),     -sin(A)],
-                           [     0,       0, sin(A),      cos(A)]])
+                           [     0,       0, 1,     0],
+                           [     0,       0, 0,      1]])
+        self.vertices = np.matmul(self.vertices, rot_mat)
+
+    def rotate2(self, degrees):
+        A = radians(degrees)
+        rot_mat = np.array([[1, 0,      0,           0],
+                            [0,  1,      0,           0],
+                            [     0,       0, cos(A),     -sin(A)],
+                            [     0,       0, sin(A),      cos(A)]])
         self.vertices = np.matmul(self.vertices, rot_mat)
 
     def rotate_yw(self, degrees):
@@ -313,16 +322,16 @@ class HyperCube:
         A = radians(degrees)
         rot_mat = np.array([[1, 0, 0, 0],
                             [0, cos(A), -sin(A), 0, 0],
-                            [0, sin(A), cos(A), 0, 0],
+                            [0, sin(A), cos(A), 1, 0],
                             [0, 0, 0, 1]])
         self.vertices = np.matmul(self.vertices, rot_mat)
 
-    def rotate_xy(self, degrees):
+    def rotate_zw(self, degrees):
         A = radians(degrees)
         rot_mat = np.array([[cos(A), -sin(A), 0, 0],
-                            [sin(A),  cos(A), 0, 0],
-                            [     0,       0, 1, 0],
-                            [     0,       0, 0, 1]])
+                            [sin(A), cos(A), 0, 0],
+                            [0, 0, 1, 0],
+                            [0, 0, 0, 1]])
         self.vertices = np.matmul(self.vertices, rot_mat)
 
     def rotate_yz(self, degrees):
@@ -331,6 +340,22 @@ class HyperCube:
                             [0, 1, 0, 0],
                             [0, 0, 1, 0],
                             [sin(A), 0, 0, cos(A)]])
+        self.vertices = np.matmul(self.vertices, rot_mat)
+
+    def rotate_xz(self, degrees):
+        A = radians(degrees)
+        rot_mat = np.array([[1, 0, 0, 0],
+                            [0, cos(A), 0, -sin(A)],
+                            [0, 0, 1, 0],
+                            [0, sin(A), 0, cos(A)]])
+        self.vertices = np.matmul(self.vertices, rot_mat)
+
+    def rotate_xy(self, degrees):
+        A = radians(degrees)
+        rot_mat = np.array([[cos(A), -sin(A), 0, 0],
+                            [sin(A),  cos(A), 0, 0],
+                            [     0,       0, 1, 0],
+                            [     0,       0, 0, 1]])
         self.vertices = np.matmul(self.vertices, rot_mat)
 
     def translate(self, x, y, z, w):
